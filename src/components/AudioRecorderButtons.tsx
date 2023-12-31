@@ -24,7 +24,14 @@ export default function AudioRecorderButtons() {
   )
 
   const sendAudioToBackend = () => {
-
+    fetch(
+      'https://v14czaw0ed.execute-api.us-east-2.amazonaws.com/default/fiverr_efraimhoffman',
+      {
+        method: 'GET'
+      }
+    ).then(res => {
+      console.log(res)
+    })
   }
 
   return (
