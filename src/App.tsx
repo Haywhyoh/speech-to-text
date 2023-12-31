@@ -5,7 +5,7 @@ import { RecordingProvider } from "./context/RecordingContext"
 function App() {
   return (
     <RecordingProvider>
-      <main>
+      <main className="w-[400px] p-4 m-auto h-screen max-h-[-webkit-fill-available] flex flex-col justify-center">
         <CustomAudioRecorder />
       </main>
     </RecordingProvider>

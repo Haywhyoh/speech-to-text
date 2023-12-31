@@ -20,6 +20,21 @@
 
 @layer base {
   html {
+    --buttonRed: #BA2525;
+    --neutral: #CBCBCB;
+    --send: #3CA02C;
     font-family: "Space Grotesk", 'Neue Haas Grotesk Text Pro', 'system-ui', 'sans-serif';
+  }
+
+  body {
+    @apply bg-bg;
+  }
+}
+
+@layer utilities {
+  button:disabled>* {
+    @apply drop-shadow-none;
+    @apply opacity-35;
+    @apply shadow-none;
   }
 }
