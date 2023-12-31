@@ -10,12 +10,6 @@ export default function CustomAudioRecorder() {
     <div className="flex flex-col gap-6">
       <AudioRecorderScreen />
       <AudioRecorderButtons />
-      { audioSrc ? (
-        <audio
-          src={audioSrc}
-          controls={true}
-        />
-      ) : undefined}
     </div>
   )
 }

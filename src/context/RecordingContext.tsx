@@ -1,20 +1,28 @@
-import { createContext, useEffect, useState } from "react";
+import { SetStateAction, createContext, useEffect, useRef, useState } from "react";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import { recorderControls } from "react-audio-voice-recorder/dist/hooks/useAudioRecorder";
 
 interface RecordingContextType {
   controls?: recorderControls
   audioSrc?: string
+  audioRef?: React.RefObject<HTMLAudioElement>
+  audioIsPlaying?: boolean
+  setAudioIsPlaying?: React.Dispatch<SetStateAction<boolean>>
 }
 
 export const RecordingContext = createContext<RecordingContextType>({
   controls: undefined,
-  audioSrc: undefined
+  audioSrc: undefined,
+  audioRef: undefined,
+  audioIsPlaying: undefined,
+  setAudioIsPlaying: undefined,
 })
 
 export function RecordingProvider({ children } : { children: React.ReactNode }) {
   const controls = useAudioRecorder()
   const [audioSrc, setAudioSrc] = useState<string | undefined>(undefined)
+  const [audioIsPlaying, setAudioIsPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
     if(!controls.recordingBlob) return
@@ -26,13 +34,22 @@ export function RecordingProvider({ children } : { children: React.ReactNode }) 
     setAudioSrc(URL.createObjectURL(controls.recordingBlob));
   }, [controls.recordingBlob])
 
-  // useEffect(() => {
-    
-  // }, [controls.isRecording]);
+  useEffect(() => {
+    if(controls.isRecording) setAudioSrc(undefined)
+  }, [controls.isRecording])
 
   return (
-    <RecordingContext.Provider value={{ controls, audioSrc }}>
-      { children }
+    <RecordingContext.Provider value={{ controls, audioSrc, audioRef, audioIsPlaying, setAudioIsPlaying }}>
+      <>
+        { audioSrc ? (
+          <audio
+            loop={true}
+            ref={audioRef}
+            src={audioSrc}
+          />
+        ) : undefined}
+        { children }
+      </>
     </RecordingContext.Provider>
   )
 }

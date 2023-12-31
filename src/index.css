@@ -29,6 +29,10 @@
   body {
     @apply bg-bg;
   }
+
+  img, svg {
+    @apply align-middle;
+  }
 }
 
 @layer utilities {

@@ -1,9 +1,10 @@
 import { useContext } from "react"
 import { RecordingContext } from "../context/RecordingContext"
 import NeuButton from "./NeuButton"
+import { FaPlay } from "react-icons/fa"
 
 export default function AudioRecorderButtons() {
-  const { controls, audioSrc } = useContext(RecordingContext)
+  const { controls, audioSrc, audioRef, audioIsPlaying, setAudioIsPlaying } = useContext(RecordingContext)
 
   const pauseShape = (
     <>
@@ -18,9 +19,7 @@ export default function AudioRecorderButtons() {
 
   const playShape = (
     <>
-      <div 
-        className="border-t-[15px] border-l-[22px] border-b-[15px] border-l-neutral border-t-[transparent] border-b-[transparent] translate-x-[2px]" 
-      />
+      <FaPlay className="drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] h-[24px] w-[24px] translate-x-[2px] fill-neutral" />
     </>
   )
 
@@ -57,15 +56,27 @@ export default function AudioRecorderButtons() {
               ? 'Pause Recording'
               : 'Toggle Playback')
           }
-          disabled={controls && !controls.isRecording}
+          disabled={controls && !controls.isRecording && !audioSrc}
           onClick={() => {
             if (!controls) return
 
             if (controls.isRecording) controls.togglePauseResume()
+            else if(audioRef && audioRef.current) {
+              // Will never happen, but it stops TS errors because it can *technically* be undefined
+              if(!setAudioIsPlaying) return
+
+              if(audioIsPlaying) {
+                setAudioIsPlaying(false)
+                audioRef.current.pause()
+              } else {
+                setAudioIsPlaying(true)
+                audioRef.current.play()
+              }
+            }
           }}
         >
           <div className="flex gap-[0.35rem]">
-            {controls?.isPaused ? playShape : pauseShape}
+            {((controls?.isRecording && controls?.isPaused) || (!controls?.isRecording && !audioIsPlaying)) ? playShape : pauseShape}
           </div>
         </NeuButton>
       </div>
