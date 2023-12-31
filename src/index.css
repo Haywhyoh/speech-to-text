@@ -32,7 +32,11 @@
 }
 
 @layer utilities {
-  button:disabled>* {
+  button:disabled {
+    @apply pointer-events-none;
+  }
+
+  button:disabled * {
     @apply drop-shadow-none;
     @apply opacity-35;
     @apply shadow-none;
