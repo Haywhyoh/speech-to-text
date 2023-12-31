@@ -27,7 +27,8 @@ export default function AudioRecorderButtons() {
     const res = await fetch(
       'https://v14czaw0ed.execute-api.us-east-2.amazonaws.com/default/fiverr_efraimhoffman',
       {
-        method: 'GET',
+        method: 'POST',
+        body: controls?.recordingBlob
       }
     )
 

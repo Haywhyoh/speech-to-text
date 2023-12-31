@@ -31,7 +31,8 @@ export function RecordingProvider({ children } : { children: React.ReactNode }) 
 
     // When the user stops recording, the recordingBlob variable is set
     // Here, we set the audio source to point to the blob (audio) that was just recorded
-    setAudioSrc(URL.createObjectURL(controls.recordingBlob));
+    const url = URL.createObjectURL(controls.recordingBlob)
+    setAudioSrc(url)
   }, [controls.recordingBlob])
 
   useEffect(() => {
