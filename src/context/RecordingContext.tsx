@@ -36,6 +36,7 @@ export function RecordingProvider({ children } : { children: React.ReactNode }) 
   }, [controls.recordingBlob])
 
   useEffect(() => {
+    // clear audio source when user tries to record over their current recording
     if(controls.isRecording) setAudioSrc(undefined)
   }, [controls.isRecording])
 

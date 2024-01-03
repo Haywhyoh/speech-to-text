@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { RecordingContext } from "../context/RecordingContext"
 import NeuButton from "./NeuButton"
 import { FaPlay } from "react-icons/fa"
+import { getWaveBlob } from "webm-to-wav-converter"
 
 export default function AudioRecorderButtons() {
   const { controls, audioSrc, audioRef, audioIsPlaying, setAudioIsPlaying } = useContext(RecordingContext)
@@ -24,17 +25,31 @@ export default function AudioRecorderButtons() {
   )
 
   const sendAudioToBackend = async () => {
+    if(!controls || !controls.recordingBlob) return
+
+    // const fileToBackend = new File([controls.recordingBlob], "file.webm")
+    const wav = await getWaveBlob(controls.recordingBlob, false)
+
     const res = await fetch(
       'https://v14czaw0ed.execute-api.us-east-2.amazonaws.com/default/fiverr_efraimhoffman',
       {
         method: 'POST',
-        body: controls?.recordingBlob
+        body: wav,
+        headers: {
+          'Content-Type': 'audio/wav',
+        }
       }
     )
 
-    const text = await res.text()
+    if(res.ok) {
+      const text = await res.text()
+      console.log(text)
+    } else {
+      const text = await res.text()
+      console.log(text)
+    }
 
-    console.log(text)
+    
   }
 
   return (
