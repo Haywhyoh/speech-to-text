@@ -24,34 +24,46 @@ export default function AudioRecorderButtons() {
     </>
   )
 
-  const sendAudioToBackend = async () => {
-    if(!controls || !controls.recordingBlob) return
-
-    // const fileToBackend = new File([controls.recordingBlob], "file.webm")
-    const wav = await getWaveBlob(controls.recordingBlob, false)
-
-    const res = await fetch(
-      'https://v14czaw0ed.execute-api.us-east-2.amazonaws.com/default/fiverr_efraimhoffman',
-      {
-        method: 'POST',
-        body: wav,
-        headers: {
-          'Content-Type': 'audio/wav',
-        }
-      }
-    )
-
-    if(res.ok) {
-      const text = await res.text()
-      console.log(text)
-    } else {
-      const text = await res.text()
-      console.log(text)
-    }
-
-    
+  function encodeDataToBase64(buffer: ArrayBuffer): string {
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
   }
 
+  const sendAudioToBackend = async () => {
+  if (!controls || !controls.recordingBlob) return;
+
+  const wav = await getWaveBlob(controls.recordingBlob, false);
+
+  const reader = new FileReader();
+  reader.readAsDataURL(wav); // Read the blob as a data URL (base64 encoded string)
+  reader.onloadend = async () => {
+    const base64EncodedData = reader.result; // This is your base64 encoded data
+
+    // Ensure the result is a string and strip the data URL scheme part if present
+    const base64String = typeof base64EncodedData === 'string' ? base64EncodedData.split(',')[1] : '';
+
+    const res = await fetch(
+      'https://iehehqhgx0.execute-api.eu-north-1.amazonaws.com/default/speech_to_text',
+      {
+        method: 'POST',
+        body:  base64String, // Send as JSON payload
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type, Origin',
+          'Access-Control-Allow-Methods': 'OPTIONS, GET, POST', // Change to application/json
+        },
+      }
+    );
+
+    if (res.ok) {
+      const text = await res.text();
+      console.log(text);
+    } else {
+      const text = await res.text();
+      console.log(text);
+    }
+  };
+};
   return (
     <div className="flex justify-between">
       <div className="flex gap-5">

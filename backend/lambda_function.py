@@ -1,12 +1,17 @@
 import json
-import openai
+import openai 
 import os
+import base64
 from io import BytesIO
+
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
+
+
 def transcribe_audio(audio_file):
-    
+
+
     try:
         # Convert the binary audio data into a file-like object
         audio_file_binary = audio_file.encode('utf-8')
@@ -19,6 +24,8 @@ def transcribe_audio(audio_file):
     except Exception as e: 
         print(e)
         return "ERROR GENERATING TRANSCRIPT"
+    
+
 
 def lambda_handler(event, context):
     headers = {
@@ -58,3 +65,4 @@ def lambda_handler(event, context):
             'body': json.dumps('Something went wrong!'),
             'headers': headers
         }
+    
