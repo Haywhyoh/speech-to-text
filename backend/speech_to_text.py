@@ -6,7 +6,7 @@ import base64
 from email.parser import BytesParser
 from email.policy import default
 
-client = OpenAI(api_key ='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')
+client = OpenAI(api_key ='API KEY')
 
 headers = {
     'Access-Control-Allow-Origin': '*',
