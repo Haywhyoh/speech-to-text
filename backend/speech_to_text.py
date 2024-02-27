@@ -6,7 +6,7 @@ import base64
 from email.parser import BytesParser
 from email.policy import default
 
-client = OpenAI(api_key ='API KEY')
+client = OpenAI(api_key ='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')
 
 headers = {
     'Access-Control-Allow-Origin': '*',
@@ -15,7 +15,16 @@ headers = {
 }
 
 def lambda_handler(event, context):
-
+    if event['httpMethod'] == 'OPTIONS':  # Preflight request
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',  # Adjust accordingly
+                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',  # Adjust accordingly
+            },
+            'body': json.dumps('Hello from Lambda OPTIONS')
+        }
 
     try:
         if event['body']:
